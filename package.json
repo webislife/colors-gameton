@@ -1,0 +1,31 @@
+{
+  "name": "battle-color",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "node dist/server/index.js",
+    "dev": "tsc && npm run server",
+    "prisma-generate": "npx prisma generate",
+    "prisma-push": "prisma db push"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/cors": "^11.0.1",
+    "@fastify/rate-limit": "^10.3.0",
+    "@fastify/swagger": "^9.5.1",
+    "@prisma/client": "^5.17.0",
+    "canvas": "^3.1.2",
+    "fastify": "^5.4.0",
+    "fastify-swagger": "^5.2.0",
+    "prisma": "^5.17.0",
+    "sqlite3": "^5.1.7",
+    "tsc": "^2.0.4"
+  },
+  "devDependencies": {
+    "@fastify/swagger-ui": "^5.2.3",
+    "@types/node": "^20.14.12",
+    "typescript": "^5.8.3"
+  }
+}
