@@ -64,7 +64,7 @@
           <template v-for="level in selectedLevels" :key="level">
             <td>
               <div v-if="user.levels[level-1]">
-                <a data-tooltip="Кликните для просмотра" :href="`http://localhost:3031/api/user/level?userId=${user.userId}&level=${level}`">
+                <a data-tooltip="Кликните для просмотра" :href="`/api/user/level?userId=${user.userId}&level=${level}`">
                   🖼️ {{ user.levels[level-1].score }} </a>
               </div>
             </td>
@@ -135,7 +135,7 @@ const activeRating = ref<Rating>(ratings[0]);
 
 function fetchResults() {
   isDataFetch.value = true;
-  fetch('http://localhost:3031/api/game/results').then(resp => resp.json()).then(json => {
+  fetch('/api/game/results').then(resp => resp.json()).then(json => {
     console.log('json', json);
     users.value = json;
     isDataFetch.value = false;
