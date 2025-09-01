@@ -47,12 +47,9 @@ module.exports = (app: FastifyInstance) => {
      * Возвращаем изображение текущего уровня пользователю
      */
     async (
-      request: FastifyRequest<{
-        Querystring: { userId: string; level: string };
-      }>,
+      request,
       reply
     ) => {
-
       const imageName = `${request.user?.level}.png`;
       const imagePath = path.join(__dirname, "../../../levels", imageName);
 
@@ -62,7 +59,7 @@ module.exports = (app: FastifyInstance) => {
           .send(fs.readFileSync(imagePath));
       } else {
         return reply.status(404).send({
-          error: "Image not found",
+          error: "404",
           message: `Изображение ${imagePath} не найдено`,
         });
       }

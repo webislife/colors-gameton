@@ -1,9 +1,12 @@
 <template>
   <progress  v-if="isDataFetch" />
   <header class="container">
-    <h1>
-     🎨 Paint Battle геймтон
-    </h1>
+    <hgroup>
+      <h1>
+       🎨 Paint Battle геймтон
+      </h1>
+      <p>Правила игры и подробности читайте на: <a href="habr">habrlink</a></p>
+    </hgroup>
     <fieldset style="display: flex; align-items:center; gap:1rem">
       <label style="flex:1;">
         Срез по:
@@ -88,13 +91,19 @@
       </tbody>
     </table>
   </main>
+  <footer class="container">
+    <p>
+      Dev with ❤️  by <a href="https://strokoff.ru">strokoff</a>
+      Hosting <a href="https://beget.com/p16071">beget</a>
+    </p>
+  </footer>
   
 </template>
 
 <script setup lang="ts">
 import { computed } from '@vue/reactivity';
 import { onMounted, ref } from 'vue';
-const LEVELS = 2;
+const LEVELS = 5;
 type User = {
   userId: number,
   nickname: string,
@@ -110,9 +119,6 @@ type User = {
 const isDataFetch = ref(true);
 const users = ref<User[]>([]);
 const levelRate = ref('all');
-type Rating = {
-  name: String;
-}
 const selectedLevels = computed<number[]>(() => {
   if(levelRate.value === 'all') {
     return Array.from({ length:LEVELS }, (_, index) => index + 1);
@@ -120,23 +126,10 @@ const selectedLevels = computed<number[]>(() => {
     return [+levelRate.value]
   }
 });
-const ratings = [
-  {
-    name: 'Общий счет',
-    sortFn(a:User, b:User) {
-      return a.totalScore - b.totalScore
-    }
-  },
-  {
-    name: 'Точность',
-  }
-] as Rating[];
-const activeRating = ref<Rating>(ratings[0]);
 
 function fetchResults() {
   isDataFetch.value = true;
   fetch('/api/game/results').then(resp => resp.json()).then(json => {
-    console.log('json', json);
     users.value = json;
     isDataFetch.value = false;
   });
