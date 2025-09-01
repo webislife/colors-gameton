@@ -1,23 +1,34 @@
-import fastify from "fastify";
+import fastify, { FastifyServerOptions } from "fastify";
 import { FastifyInstance, FastifyRequest } from "fastify";
 import fastifySwagger from "@fastify/swagger";
 import fastifyRateLimit from "@fastify/rate-limit";
+import fastifyStatic from '@fastify/static';
 import config from "../config";
 import cors from "@fastify/cors";
 import path from "path";
 import fs from "fs";
 
-const app = fastify({ logger: true });
-const ApiRoutes = [
-  "register",
-  "colorsGen",
-  "colorsList",
-  "shoot",
-  "getLevel",
-  "nextLevel",
-  "results",
-  "sourceLevel",
-];
+const app = fastify({
+  logger: true,
+  https: config.ssl ? {
+    key: fs.readFileSync(path.join(__dirname, 'server.key')),
+    cert: fs.readFileSync(path.join(__dirname, 'server.cert'))
+  } : null
+});
+
+/**
+ * Раздаем статику (таблицу лидеров по главному пути)
+ */
+app.register(fastifyStatic, {
+  root: path.join(__dirname, '../../frontend/dist'),
+  prefix: '/', 
+  decorateReply: false
+});
+
+
+/**
+ * Настройки CORS
+ */
 app.register(cors, {
   origin: config.allowedOrigins,
 });
@@ -33,6 +44,9 @@ app.setErrorHandler((error, request, reply) => {
   });
 });
 
+/**
+ * Ограничения по запросам RPS
+ */
 app.register(fastifyRateLimit, {
   global: false,
   max: config.maxRPM,
@@ -51,6 +65,9 @@ app.register(fastifyRateLimit, {
   },
 });
 
+/**
+ * Fastify swagger
+ */
 app.register(fastifySwagger, {
   openapi: {
     info: {
@@ -110,7 +127,6 @@ app.register(async (app) => {
     .readdirSync(apiDirectory)
     .filter((file) => file.endsWith(".js")) 
     .map((file) => file.replace(".js", ""));
-console.log('routs', apiRoutes);
   apiRoutes.forEach((route) => {
     console.log("Register route", route);
     require("./api/" + route)(app);
@@ -122,7 +138,7 @@ const start = async () => {
   app.swagger();
   try {
     await app.listen({
-      port: config.port,
+      port: config.ssl ? 443 : config.port,
       host: "0.0.0.0",
     });
   } catch (err) {

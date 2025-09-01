@@ -26,7 +26,11 @@ const config = {
     /**
      * Высота канваса
      */
-    canvasHeight: 768
+    canvasHeight: 768,
+    /**
+     * Режим с SSL
+     */
+    ssl: false
     
 }
 export default  config;
