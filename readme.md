@@ -3,6 +3,7 @@
 - [Репозиторий](https://github.com/webislife/colors-gameton)
 - [Swagger](https://colors.stroko.beget.tech/api)
 - [Таблица лидеров](https://colors.stroko.beget.tech/)
+- [Статья на хабре](https://habr.com/ru/articles/942934/)
 
 ## Краткая инструкция по установке локально
 1. Клонируем репозиторий

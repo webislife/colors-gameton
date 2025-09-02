@@ -5,7 +5,7 @@
       <h1>
        🎨 Paint Battle геймтон
       </h1>
-      <p>Правила игры и подробности читайте на: <a href="habr">habrlink</a></p>
+      <p>Правила игры и подробности читайте на: <a target="_blank" href="https://habr.com/ru/articles/942934/">Habr</a></p>
     </hgroup>
     <fieldset style="display: flex; align-items:center; gap:1rem">
       <label style="flex:1;">
