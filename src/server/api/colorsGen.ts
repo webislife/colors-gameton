@@ -60,7 +60,7 @@ module.exports = (app: FastifyInstance) => {
         const colors = Array.from({ length: genColorsCount }, () =>
           generateRandomColor()
         );
-        // Add the generated colors to the database using Prisma
+        
         await Promise.all(
           colors.map(async (color) => {
             return prisma.color.create({

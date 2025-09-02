@@ -30,7 +30,11 @@ const config = {
     /**
      * Режим с SSL
      */
-    ssl: false
+    ssl: false,
+    /**
+     * Задержка после выстрела перед расчетом очков
+     */
+    rateCalcTimeout: 3000
     
 }
 export default  config;

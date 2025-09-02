@@ -275,7 +275,7 @@ module.exports = (app: FastifyInstance) => {
       ctx.beginPath();
       ctx.arc(targetX, targetY, circleSize, 0, Math.PI * 2);
       ctx.fill();
-      // Save canvas as image
+      // Сохраняем канвас как изображение
       const buffer = canvas.toBuffer("image/png");
       fs.writeFileSync(imagePath, new Uint8Array(buffer));
       reply.header("Content-Type", "image/png").send(buffer);
@@ -297,7 +297,7 @@ module.exports = (app: FastifyInstance) => {
             console.log(`Calculated result for user ${user.id}:`, result);
           });
         },
-        3000
+        config.rateCalcTimeout
       );
     }
   );
