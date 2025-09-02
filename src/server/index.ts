@@ -37,9 +37,10 @@ app.register(cors, {
  * Глобальный обработчик ошибок в API
  */
 app.setErrorHandler((error, request, reply) => {
-  console.log(error);
+  console.log('error', error.toString());
   reply.status(500).send({
     error: "Ошибка сервера 500",
+    message: error.toString(),
     requestId: request.id,
   });
 });
