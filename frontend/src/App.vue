@@ -75,7 +75,7 @@
               <div v-if="user.levels[level-1]">
                 <span data-tooltip="Выстрелы">⌖ {{ user.levels[level-1].shots }}</span>
                 <span data-tooltip="Промахи"> 🙈 {{ user.levels[level-1].miss }}</span>
-                <span data-tooltip="Попадание"> 🎯 {{ 100-(user.levels[level-1].shots/100*user.levels[level-1].miss) }}%</span>
+                <span data-tooltip="Попадание"> 🎯 {{ (100 - (user.levels[level-1].miss / user.levels[level-1].shots * 100)).toFixed(2) }}%</span>
               </div>
             </td>
             <td>
