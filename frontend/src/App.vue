@@ -33,7 +33,7 @@
             Никнейм
           </th>
           <template v-for="level in selectedLevels" :key="level">
-            <th colspan="3">
+            <th colspan="2">
               Уровень {{ level }}
             </th>
           </template>
