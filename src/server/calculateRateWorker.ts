@@ -1,9 +1,31 @@
 import path from "path";
-import { createCanvas, loadImage } from "canvas";
+import { createCanvas, loadImage, ImageData } from "canvas";
 import { parentPort } from "worker_threads";
 import { PrismaClient } from "@prisma/client";
 import config from "../config";
 const prisma = new PrismaClient();
+
+// Кэш для исходных изображений уровней
+const sourceImageCache = new Map<number, ImageData>();
+
+async function getSourceImageData(level: number): Promise<ImageData> {
+  if (sourceImageCache.has(level)) {
+    return sourceImageCache.get(level)!;
+  }
+
+  const sourceImage = await loadImage(
+    path.join(__dirname, "../../levels", `${level}.png`)
+  );
+  
+  const canvas = createCanvas(config.canvasWidth, config.canvasHeight);
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(sourceImage, 0, 0);
+  
+  const imageData = ctx.getImageData(0, 0, config.canvasWidth, config.canvasHeight);
+  sourceImageCache.set(level, imageData);
+  
+  return imageData;
+}
 
 if (parentPort) {
   parentPort.on("message", async (shot: { level: number; userId: number }) => {
@@ -29,15 +51,8 @@ async function clacRate(level: number, userId: number) {
   let score = 0;
   const levelImage = `${userId}-${level}.png`;
   console.log("start calculate", level, userId, levelImage);
-  //Prepare source image
-  const sourceImage = await loadImage(
-    path.join(__dirname, "../../levels", `${level}.png`)
-  );
-  const sourceCanvas = createCanvas(width, height);
-  const sourceCtx = sourceCanvas.getContext("2d");
-  sourceCtx.drawImage(sourceImage, 0, 0);
-  const sourceData = sourceCtx.getImageData(0, 0, width, height);
-
+  
+  const sourceData = await getSourceImageData(level);
   //Prepare level image
   const levelImg = await loadImage(
     path.join(__dirname, "/api/images", levelImage)
@@ -79,8 +94,7 @@ async function clacRate(level: number, userId: number) {
     const diffB = Math.abs(b - lb);
   
     // Score = максимальная разница минус фактическая разница
-      score += 765 - (diffR + diffG + diffB);
-      // score += 765 - (r - lr + (g - lg) + (b - lb));
+    score += 765 - (diffR + diffG + diffB);
     }
   }
   console.log("score", Math.round(score));
