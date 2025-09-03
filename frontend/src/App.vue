@@ -50,9 +50,6 @@
             <th>
               Меткость
             </th>
-            <th>
-              Эффективность
-            </th>
           </template>
         </tr>
       </thead>
@@ -73,14 +70,12 @@
             </td>
             <td>
               <div v-if="user.levels[level-1]">
-                <span data-tooltip="Выстрелы">⌖ {{ user.levels[level-1].shots }}</span>
-                <span data-tooltip="Промахи"> 🙈 {{ user.levels[level-1].miss }}</span>
-                <span data-tooltip="Попадание"> 🎯 {{ calcMissRate(user.levels[level-1]) }}%</span>
+                <span data-tooltip="Выстрелы">⌖&nbsp;{{ user.levels[level-1].shots }}</span>
+                <span data-tooltip="Промахи"> 🙈&nbsp;{{ user.levels[level-1].miss }}</span>
+                <span data-tooltip="Попадание"> 🎯&nbsp;{{ calcMissRate(user.levels[level-1]) }}%</span>
               </div>
-            </td>
-            <td>
               <div v-if="user.levels[level-1]">
-                <span v-if="user.levels[level-1].shots" data-tooltip="Очков за выстрел">⭐ {{ (user.levels[level-1].score/user.levels[level-1].shots).toFixed(3) }}</span>
+                <span v-if="user.levels[level-1].shots" data-tooltip="Очков за выстрел">⭐&nbsp;{{ (user.levels[level-1].score/user.levels[level-1].shots).toFixed(3) }}</span>
               </div>
             </td>
           </template>
