@@ -29,8 +29,6 @@ async function clacRate(level: number, userId: number) {
   let score = 0;
   const levelImage = `${userId}-${level}.png`;
   console.log("start calculate", level, userId, levelImage);
-  console.log('sourceImage', path.join(__dirname, "../../levels", `${level}.png`));
-  console.log('path', path.join(__dirname, "/api/images", levelImage));
   //Prepare source image
   const sourceImage = await loadImage(
     path.join(__dirname, "../../levels", `${level}.png`)
@@ -75,13 +73,14 @@ async function clacRate(level: number, userId: number) {
       lg < 255 &&
       lb < 255
     ) {
-      //Debug info
-      // Calculate x and y position
-      // const x = (i / 4) % width;
-      // const y = Math.floor((i / 4) / width);
-      // console.log(`Pixel source [${x} ${y}] - R: ${r}, G: ${g}, B: ${b}, A: ${a}`);
-      // console.log(`Pixel level [${x} ${y}] - R: ${lr}, G: ${lg}, B: ${lb}, A: ${la}`);
-      score += 765 - (r - lr + (g - lg) + (b - lb));
+    // Вычисляем разницу по каждому каналу и суммируем
+    const diffR = Math.abs(r - lr);
+    const diffG = Math.abs(g - lg);
+    const diffB = Math.abs(b - lb);
+  
+    // Score = максимальная разница минус фактическая разница
+      score += 765 - (diffR + diffG + diffB);
+      // score += 765 - (r - lr + (g - lg) + (b - lb));
     }
   }
   console.log("score", Math.round(score));

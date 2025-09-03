@@ -28,7 +28,7 @@ module.exports = (app: FastifyInstance) => {
       schema: {
         security: [{ apiToken: [] }],
         summary: "Генерация цветов",
-        description: "Генерирует 5 случайных цветов за 1 ход",
+        description: `Генерирует ${config.genColorsCount} случайных цветов за 1 ход`,
         tags: ["Colors"],
         response: {
           200: {
@@ -47,7 +47,7 @@ module.exports = (app: FastifyInstance) => {
         const userColorsCount = await prisma.color.count({
           where: { userId: +user.id },
         });
-        let genColorsCount = 5;
+        let genColorsCount = config.genColorsCount;
 
         if (userColorsCount === config.colorsLimit) {
           reply.code(400).send({ error: "Limit colors reached" });
