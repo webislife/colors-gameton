@@ -75,7 +75,7 @@
               <div v-if="user.levels[level-1]">
                 <span data-tooltip="Выстрелы">⌖ {{ user.levels[level-1].shots }}</span>
                 <span data-tooltip="Промахи"> 🙈 {{ user.levels[level-1].miss }}</span>
-                <span data-tooltip="Попадание"> 🎯 {{ (100 - (user.levels[level-1].miss / user.levels[level-1].shots * 100)).toFixed(2) }}%</span>
+                <span data-tooltip="Попадание"> 🎯 {{ calcMissRate(user.levels[level-1]) }}%</span>
               </div>
             </td>
             <td>
@@ -104,21 +104,30 @@
 import { computed } from '@vue/reactivity';
 import { onMounted, ref } from 'vue';
 const LEVELS = 5;
+type UserLevel = {
+  level: number,
+  score: number,
+  id: number,
+  miss: number,
+  shots: number
+};
 type User = {
   userId: number,
   nickname: string,
   totalScore: number,
-  levels: {
-    level: number,
-    score: number,
-    id: number,
-    miss: number,
-    shots: number
-  }[]
+  levels: UserLevel[]
 }
 const isDataFetch = ref(true);
 const users = ref<User[]>([]);
 const levelRate = ref('all');
+
+function calcMissRate(level:UserLevel) {
+  if (level.shots === 0) {
+    return 0
+  } else {
+    return (100 - (level.miss / level.shots * 100)).toFixed(2)
+  }
+}
 const selectedLevels = computed<number[]>(() => {
   if(levelRate.value === 'all') {
     return Array.from({ length:LEVELS }, (_, index) => index + 1);
